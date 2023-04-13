@@ -2,6 +2,9 @@ package openai
 
 import (
 	"errors"
+	"strings"
+
+	"github.com/pandodao/tokenizer-go"
 )
 
 const (
@@ -24,6 +27,7 @@ type ChatGPTResponseBody struct {
 	Choices []ChatGPTChoiceItem    `json:"choices"`
 	Usage   map[string]interface{} `json:"usage"`
 }
+
 type ChatGPTChoiceItem struct {
 	Message      Messages `json:"message"`
 	Index        int      `json:"index"`
@@ -41,7 +45,13 @@ type ChatGPTRequestBody struct {
 	PresencePenalty  int        `json:"presence_penalty"`
 }
 
-func (gpt ChatGPT) Completions(msg []Messages) (resp Messages, err error) {
+func (msg *Messages) CalculateTokenLength() int {
+	text := strings.TrimSpace(msg.Content)
+	return tokenizer.MustCalToken(text)
+}
+
+func (gpt *ChatGPT) Completions(msg []Messages) (resp Messages,
+	err error) {
 	requestBody := ChatGPTRequestBody{
 		Model:            engine,
 		Messages:         msg,
@@ -52,10 +62,12 @@ func (gpt ChatGPT) Completions(msg []Messages) (resp Messages, err error) {
 		PresencePenalty:  0,
 	}
 	gptResponseBody := &ChatGPTResponseBody{}
-	err = gpt.sendRequestWithBodyType(gpt.ApiUrl+"/v1/chat/completions", "POST",
-		jsonBody,
-		requestBody, gptResponseBody)
-
+	url := gpt.FullUrl("chat/completions")
+	//fmt.Println(url)
+	if url == "" {
+		return resp, errors.New("无法获取openai请求地址")
+	}
+	err = gpt.sendRequestWithBodyType(url, "POST", jsonBody, requestBody, gptResponseBody)
 	if err == nil && len(gptResponseBody.Choices) > 0 {
 		resp = gptResponseBody.Choices[0].Message
 	} else {

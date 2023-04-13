@@ -4,13 +4,16 @@ import (
 	"bytes"
 	"context"
 	"encoding/base64"
+	"errors"
 	"fmt"
-	"github.com/google/uuid"
-	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
-	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
+
 	"start-feishubot/initialization"
 	"start-feishubot/services"
 	"start-feishubot/services/openai"
+
+	"github.com/google/uuid"
+	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
+	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 )
 
 type CardKind string
@@ -67,7 +70,7 @@ func replyCard(ctx context.Context,
 	// 服务端错误处理
 	if !resp.Success() {
 		fmt.Println(resp.Code, resp.Msg, resp.RequestId())
-		return err
+		return errors.New(resp.Msg)
 	}
 	return nil
 }
@@ -350,6 +353,7 @@ func withPicResolutionBtn(sessionID *string) larkcard.
 		Build()
 	return actions
 }
+
 func withRoleTagsBtn(sessionID *string, tags ...string) larkcard.
 	MessageCardElement {
 	var menuOptions []MenuOption
@@ -432,7 +436,7 @@ func replyMsg(ctx context.Context, msg string, msgId *string) error {
 	// 服务端错误处理
 	if !resp.Success() {
 		fmt.Println(resp.Code, resp.Msg, resp.RequestId())
-		return err
+		return errors.New(resp.Msg)
 	}
 	return nil
 }
@@ -461,10 +465,11 @@ func uploadImage(base64Str string) (*string, error) {
 	// 服务端错误处理
 	if !resp.Success() {
 		fmt.Println(resp.Code, resp.Msg, resp.RequestId())
-		return nil, err
+		return nil, errors.New(resp.Msg)
 	}
 	return resp.Data.ImageKey, nil
 }
+
 func replyImage(ctx context.Context, ImageKey *string,
 	msgId *string) error {
 	//fmt.Println("sendMsg", ImageKey, msgId)
@@ -495,10 +500,9 @@ func replyImage(ctx context.Context, ImageKey *string,
 	// 服务端错误处理
 	if !resp.Success() {
 		fmt.Println(resp.Code, resp.Msg, resp.RequestId())
-		return err
+		return errors.New(resp.Msg)
 	}
 	return nil
-
 }
 
 func replayImageCardByBase64(ctx context.Context, base64Str string,
@@ -580,10 +584,11 @@ func sendMsg(ctx context.Context, msg string, chatId *string) error {
 	// 服务端错误处理
 	if !resp.Success() {
 		fmt.Println(resp.Code, resp.Msg, resp.RequestId())
-		return err
+		return errors.New(resp.Msg)
 	}
 	return nil
 }
+
 func sendClearCacheCheckCard(ctx context.Context,
 	sessionId *string, msgId *string) {
 	newCard, _ := newSendCard(
