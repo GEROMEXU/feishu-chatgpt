@@ -26,6 +26,58 @@
     🚀 Feishu OpenAI 🚀
 </p>
 
+## 🥁 号外号外!
+
+大家好呀！我们正在招募一批小伙伴来加入我们的重构项目！
+
+如果你对以下领域感兴趣，那么你就是我们正在寻找的人啦！
+
+#### 设计小伙伴
+- 参与使用在线设计工具协作：Figma、Mastergo、JS Design或Pixso。
+- 有B端设计经验就更棒啦！
+- 加入熟悉的团队：成员已经为超过百款设计插件进行交付，我们是设计师最可靠的搭档，坚决抵制奇怪的需求。
+- 尽享优厚福利：第一时间接触最新的AI设计插件，更有其他丰厚的福利等你来拿。
+
+#### 前端小伙伴
+- Vue or React ~
+- 如果你还有一些B端开发经验那就更棒啦！
+- 创意？没关系，我们有楼上的设计师！
+
+#### 后端小伙伴
+- Golang语言，了解不用说！
+- 熟练掌握gin框架，开发后端就跟呼吸一样自然！
+- 对钉钉、飞书、企微等平台的SDK有所了解，能够开发和集成一系列令人惊叹的功能！
+- 精通平台化细节思维，让你开发的高效服务端热更新脚本惊艳全场！
+- 轻松驾驭Docker容器化技术，随心所欲地部署代码！
+- 有一些支付功能开发经验，真正能让钞票砰砰砰地飞！
+- 了解部分Linux脚本和socket编程
+- 上述满足一些即可
+
+#### 算法小伙伴
+- NLP和CV领域的算法达人
+
+#### 测试小伙伴
+- 重点参与内测产品的功能测试
+- 欢迎没有代码技能的小伙伴
+
+
+如果你正在寻找gpt应用的灵感，那不妨加入我们的项目组吧！
+
+我们的目标是通过泛AI技术，为企业层面的场景协同提供赋能。
+
+我们队员有
+- [EX-chatGPT](https://github.com/circlestarzero/EX-chatGPT)和[ChatPaper的维护者](https://github.com/kaixindelele/ChatPaper)-->[cc](https://github.com/circlestarzero)
+- [钉钉GPT的维护者](https://github.com/eryajf/chatgpt-dingtalk)-->[eryajf](https://github.com/eryajf)
+- [飞书GPT的维护者](https://github.com/Leizhenpeng/feishu-chatgpt)-->[river](https://space.bilibili.com/66891783)
+- [上百款在线设计插件的开发者](https://mastergo.com/community/profile/72319417503384?tab=plugin)-->山山
+- 正在心动的你！
+
+
+想成为这个充满活力、热情的团队的一员嘛？
+
+戳我微信 `laolei_forkway`
+
+
 ## 👻 机器人功能
 
 🗣 语音交流：私人直接与机器人畅所欲言
@@ -63,6 +115,8 @@
 📊 表格分析：轻松导入飞书表格，提升数据分析效率 🚧
 
 🍊 私有数据训练：利用公司产品信息对GPT二次训练，更好地满足客户个性化需求 🚧
+
+
 
 ## 🌟 项目特点
 
@@ -290,7 +344,35 @@ dockerproxy.com/leizhenpeng/feishu-chatgpt:latest
 卡片回调地址: http://IP:9000/webhook/card
 
 把它填入飞书后台
-<br>
+
+--- 
+
+部署azure版本
+
+```bash
+docker build -t feishu-chatgpt:latest .
+docker run -d --name feishu-chatgpt -p 9000:9000 \
+--env APP_ID=xxx \
+--env APP_SECRET=xxx \
+--env APP_ENCRYPT_KEY=xxx \
+--env APP_VERIFICATION_TOKEN=xxx \
+--env BOT_NAME=chatGpt \
+--env AZURE_ON=true \
+--env AZURE_API_VERSION=xxx \
+--env AZURE_RESOURCE_NAME=xxx \
+--env AZURE_DEPLOYMENT_NAME=xxx \
+--env AZURE_OPENAI_TOKEN=xxx \
+feishu-chatgpt:latest
+```
+
+注意:
+
+- `BOT_NAME` 为飞书机器人名称，例如 `chatGpt`
+- `AZURE_ON` 为是否使用azure ,请填写 `true`
+- `AZURE_API_VERSION` 为azure api版本 例如 `2023-03-15-preview`
+- `AZURE_RESOURCE_NAME` 为azure 资源名称 类似 `https://{AZURE_RESOURCE_NAME}.openai.azure.com`
+- `AZURE_DEPLOYMENT_NAME` 为azure 部署名称 类似 `https://{AZURE_RESOURCE_NAME}.openai.azure.com/deployments/{AZURE_DEPLOYMENT_NAME}/chat/completions`
+- `AZURE_OPENAI_TOKEN` 为azure openai token
 
 </details>
 
